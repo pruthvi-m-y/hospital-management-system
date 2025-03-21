@@ -39,8 +39,10 @@ The **Hospital Management System** is a **Java-based web application** designed 
 - The project includes the **MySQL Connector JAR**, and you can install it as needed.
 
 ## Contributors
-- **[Your Name]**
+- **[Pruthvi M Y]**
 
----
+## Installation Instructions
 
-This clearly **highlights the MySQL Connector requirement** and where to place the JAR file. Let me know if you need any modifications! 🚀😊
+### 1. Clone the repository to your local machine:
+```sh
+git clone https://github.com/pruthvi-m-y/hospital-management-system.git
