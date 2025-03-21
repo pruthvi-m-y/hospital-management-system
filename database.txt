@@ -1,0 +1,80 @@
+-- Create the database
+CREATE DATABASE hospital;
+USE hospital;
+
+-- Patients Table
+CREATE TABLE patients (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    gender ENUM('Male', 'Female', 'Other') NOT NULL,
+    phone VARCHAR(15) NOT NULL UNIQUE,
+    address TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO patients (username, password, name, gender, phone, address) 
+VALUES ('pruthvi_my', 'p123', 'Pruthvi M Y', 'Female', '9876543210', 'Mysuru, Karnataka');
+
+-- Doctors Table
+CREATE TABLE doctors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    specialization VARCHAR(100) NOT NULL,
+    phone VARCHAR(15) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE
+);
+ALTER TABLE doctors ADD COLUMN password VARCHAR(255) NOT NULL;
+ALTER TABLE doctors MODIFY COLUMN password VARCHAR(255) NOT NULL;
+select *from doctors;
+
+
+INSERT INTO doctors (id, name, specialization, email, phone)
+VALUES
+(101, 'Dr. Ramesh Kumar', 'General Consultant', 'ramesh.kumar@example.com', '9876543200'),
+(102, 'Dr. Ananya Sharma', 'Gynecologist', 'ananya.sharma@example.com', '9876543201'),
+(103, 'Dr. Mohan Iyer', 'Cardiologist', 'mohan.iyer@example.com', '9876543202');
+select *from doctors;
+UPDATE doctors SET password = 's123' WHERE id = 101;
+UPDATE doctors SET password = 'a123' WHERE id = 102;
+UPDATE doctors SET password = 'm123' WHERE id = 103;
+
+-- Appointments Table
+CREATE TABLE appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    age INT NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    specialization VARCHAR(50) NOT NULL,
+    doctor_id INT NOT NULL,
+    appointment_date DATE NOT NULL,
+    appointment_time TIME NOT NULL,
+    FOREIGN KEY (patient_id) REFERENCES patients(id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
+);
+select *from appointments;
+
+-- Bills Table
+CREATE TABLE bills (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    patient_id INT,
+    amount DECIMAL(10, 2) NOT NULL,
+    status ENUM('Paid', 'Unpaid') DEFAULT 'Unpaid',
+    FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE
+);
+
+CREATE TABLE admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(100) NOT NULL
+);
+select *from admin;
+-- Insert Default Admin
+INSERT INTO admin (username, password, name) 
+VALUES ('admin', 'admin123', 'Admin');
+UPDATE admin 
+SET password = SHA2('admin123', 256) 
+WHERE username = 'admin';
+
